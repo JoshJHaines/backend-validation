@@ -1,5 +1,17 @@
 const User = require("../model/User");
 
+async function getAllUser(req, res) {
+    try {
+        let fetchedUser = await User.find({});
+
+        res.json({ message: "success", payload: fetchedUser });
+    } catch (error) {
+        res.status(500).json({
+            message: "you have failed",
+            error: error.message,
+        });
+    }
+}
 async function createUser(req, res) {
 	const { firstName, lastName, username, email, password } = req.body;
 	try {
@@ -18,6 +30,8 @@ async function createUser(req, res) {
 	}
 }
 
+
 module.exports = {
+    getAllUser,
 	createUser,
 };
