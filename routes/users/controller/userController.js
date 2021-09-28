@@ -30,8 +30,22 @@ async function createUser(req, res) {
 	}
 }
 
+async function deleteUserById(req, res) {
+	try {
+		let deletedUser = await User.findByIdAndDelete(req.params.id);
+
+        res.json({ message: "success", payload: deletedUser });
+	} catch (error) {
+		res.status(500).json({
+			message: "you have failed",
+			error: error.message,
+		});
+	}
+}
+
 
 module.exports = {
     getAllUser,
 	createUser,
+    deleteUserById
 };
