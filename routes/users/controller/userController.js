@@ -31,7 +31,6 @@ async function createUser(req, res) {
 	const { firstName, lastName, username, email, password } = req.body;
     let body = req.body;
 	let errObj = {};
-    //check if empty
     for (let key in body) {
         if (checkIsEmpty(body[key])) {
             errObj[`${key}`] = `${key} cannot be empty`;
@@ -41,30 +40,12 @@ async function createUser(req, res) {
 		errObj.firstName =
 			"first name cannot contain special characters and numbers";
 	}
-    // if (checkForLength(firstName)){
-    //     errObj.firstName = 
-    //     "first name cannot be empty";
-    // }
+    
 	if (checkForNumbersAndSymbol(lastName)) {
 		errObj.lastName =
 			"last name cannot contain special characters and numbers";
 	}
-    // if (checkForLength(lastName)){
-    //     errObj.lastName = 
-    //     "last name cannot be empty";
-    // }
-    // if (checkForLength(username)){
-    //     errObj.username = 
-    //     "username cannot be empty";
-    // }
-    // if (checkForLength(email)){
-    //     errObj.email = 
-    //     "email cannot be empty";
-    // }
-    // if (checkForLength(password)){
-    //     errObj.password = 
-    //     "password cannot be empty";
-    // }
+
 	if (Object.keys(errObj).length > 0) {
 		return res.status(500).json({
 			message: "error",
