@@ -1,11 +1,11 @@
 const User = require("../model/User");
 
-function checkForNumbersAndSymbol(target){
-    if(target.match(/[!`\-=@#$%^&*()\[\],.?":;{}|<>1234567890]/g)){
-        return true
-    } else{ 
-        return false
-    }
+function checkForNumbersAndSymbol(target) {
+	if (target.match(/[!`\-=@#$%^&*()\[\],.?":;{}|<>1234567890]/g)) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 async function getAllUser(req, res) {
@@ -23,12 +23,22 @@ async function getAllUser(req, res) {
 async function createUser(req, res) {
 	const { firstName, lastName, username, email, password } = req.body;
 
-    console.log('Check First: ', checkForNumbersAndSymbol(firstName))
-    console.log('Check Last: ', checkForNumbersAndSymbol(lastName))
+	console.log("Check First: ", checkForNumbersAndSymbol(firstName));
+	console.log("Check Last: ", checkForNumbersAndSymbol(lastName));
+
+	let errObj = {};
 	if (checkForNumbersAndSymbol(firstName)) {
+		errObj.firstName =
+			"first name cannot contain special characters and numbers";
+	}
+	if (checkForNumbersAndSymbol(lastName)) {
+		errObj.lastName =
+			"last name cannot contain special characters and numbers";
+	}
+	if (Object.keys(errObj).length > 0) {
 		return res.status(500).json({
 			message: "error",
-			error: "first name cannot contain special characters and numbers",
+			error: errObj,
 		});
 	}
 
