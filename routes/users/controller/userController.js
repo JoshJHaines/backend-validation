@@ -14,6 +14,21 @@ function checkForNumbersAndSymbol(target) {
 		return false;
 	}
 }
+function checkSymbol(target) {
+	if (target.match(/[!`\-=@#$%^&*()\[\],.?":;{}|<>]/g)) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function checkIsEmail(target){
+    if (target.match(/\S+@\S+\.\S+/)){
+        return true
+    } else {
+        return false
+    }
+}
 
 async function getAllUser(req, res) {
 	try {
@@ -46,6 +61,13 @@ async function createUser(req, res) {
 			"last name cannot contain special characters and numbers";
 	}
 
+    if (checkSymbol(username)){
+        errObj.username = "username cannot contain special characters and numbers"
+    }
+
+    if (!checkIsEmail(email)){
+        errObj.username = "email is not a valid email"
+    }
 	if (Object.keys(errObj).length > 0) {
 		return res.status(500).json({
 			message: "error",
