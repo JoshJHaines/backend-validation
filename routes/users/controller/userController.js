@@ -1,5 +1,12 @@
 const User = require("../model/User");
 
+function checkForLength(target){
+    if(target.length === 0){
+        return true
+    }else{
+        return false
+    }
+}
 function checkForNumbersAndSymbol(target) {
 	if (target.match(/[!`\-=@#$%^&*()\[\],.?":;{}|<>1234567890]/g)) {
 		return true;
@@ -23,18 +30,35 @@ async function getAllUser(req, res) {
 async function createUser(req, res) {
 	const { firstName, lastName, username, email, password } = req.body;
 
-	console.log("Check First: ", checkForNumbersAndSymbol(firstName));
-	console.log("Check Last: ", checkForNumbersAndSymbol(lastName));
-
 	let errObj = {};
 	if (checkForNumbersAndSymbol(firstName)) {
 		errObj.firstName =
 			"first name cannot contain special characters and numbers";
 	}
+    if (checkForLength(firstName)){
+        errObj.firstName = 
+        "first name cannot be empty";
+    }
 	if (checkForNumbersAndSymbol(lastName)) {
 		errObj.lastName =
 			"last name cannot contain special characters and numbers";
 	}
+    if (checkForLength(lastName)){
+        errObj.lastName = 
+        "last name cannot be empty";
+    }
+    if (checkForLength(username)){
+        errObj.username = 
+        "username cannot be empty";
+    }
+    if (checkForLength(email)){
+        errObj.email = 
+        "email cannot be empty";
+    }
+    if (checkForLength(password)){
+        errObj.password = 
+        "password cannot be empty";
+    }
 	if (Object.keys(errObj).length > 0) {
 		return res.status(500).json({
 			message: "error",
