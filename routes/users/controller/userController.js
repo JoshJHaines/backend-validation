@@ -2,13 +2,6 @@ const bcrypt = require("bcryptjs");
 const validator = require("validator");
 const User = require("../model/User");
 
-function checkIsEmpty(target) {
-	if (target.length === 0) {
-		return true;
-	} else {
-		return false;
-	}
-}
 async function getAllUser(req, res) {
 	try {
 		let fetchedUser = await User.find({});
