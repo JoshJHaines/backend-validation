@@ -1,5 +1,5 @@
-const bcrypt = require("bcryptjs")
-const validator = require('validator');
+const bcrypt = require("bcryptjs");
+const validator = require("validator");
 const User = require("../model/User");
 
 function checkIsEmpty(target) {
@@ -41,15 +41,14 @@ async function createUser(req, res) {
 	}
 
 	if (!validator.isAlphanumeric(username)) {
-		errObj.username =
-			"username cannot contain special characters";
+		errObj.username = "username cannot contain special characters";
 	}
 
 	if (!validator.isEmail(email)) {
 		errObj.username = "email is not a valid email";
 	}
 
-    if (!validator.isStrongPassword(password)) {
+	if (!validator.isStrongPassword(password)) {
 		errObj.password = "Make a real passsword loser";
 	}
 	if (Object.keys(errObj).length > 0) {
@@ -60,7 +59,6 @@ async function createUser(req, res) {
 	}
 
 	try {
-
 		let salt = await bcrypt.genSalt(10);
 		let hashed = await bcrypt.hash(password, salt);
 
