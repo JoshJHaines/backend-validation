@@ -1,3 +1,4 @@
+const bcrypt = require("bcryptjs")
 const User = require("../model/User");
 
 function checkIsEmpty(target) {
@@ -88,12 +89,16 @@ async function createUser(req, res) {
 	}
 
 	try {
+
+		let salt = await bcrypt.genSalt(10);
+		let hashed = await bcrypt.hash(password, salt);
+
 		const createdUser = new User({
 			firstName,
 			lastName,
 			username,
 			email,
-			password,
+			password: hashed,
 		});
 
 		let savedUser = await createdUser.save();
