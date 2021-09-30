@@ -82,3 +82,105 @@ mongoose.connect("mongodb://localhost:27017/'database-name'",{
   console.log(e)
 })
 ```
+## Routes Structure
+
+- routes
+  - users 
+    - controller
+      - usersController.js
+    - model
+      - Users.js
+    - usersRouter.js
+
+### Users
+This folder will hold all of the routes and middleware for the Users. Similar folders can be created for things like games, places, or other logic needed. 
+
+### Model
+This will house you User.js file which makes up your DB Schema
+#### User.js
+1. Require Mongoose
+2. Require Schema
+   1. Build Model Object
+   2. Object fields are your db fields for this model.
+   3. Within each field is another object holding its requirements.
+   4. This is where you can dictate data type, unique, is it saved lowercase, etc.
+3. Export Model
+
+Example:
+``` javascript
+const mongoose = require("mongoose");
+
+const userSchema = new mongoose.Schema(
+	{
+		firstName: {
+			type: String,
+		},
+		lastName: {
+			type: String,
+		},
+		username: {
+			type: String,
+			unique: true,
+		},
+		email: {
+			type: String,
+			unique: true,
+		},
+		password: {
+			type: String,
+		},
+	},
+	{
+		timestamps: true,
+	}
+);
+
+module.exports = mongoose.model("user", userSchema);
+```
+### Controller
+This will house your controller.js.
+
+#### userController.js
+1. Require data models needed for these functions
+2. Require any external libraries such as bcrpytJS  or validatorJS. 
+   1. These most likely need to be installed through npm
+3. Build Functions
+4. Export for use in Router
+
+Example:
+``` javascript
+const bcrypt = require("bcryptjs");
+const validator = require("validator");
+const User = require("../model/User");
+
+async function getAllUser(req, res) {
+	try {
+		let fetchedUser = await User.find({});
+
+module.exports = {
+	getAllUser,
+};
+```
+
+### usersRouter.js
+This is where you will create routes for URL use. 
+
+1. Require Express
+2. Use Router function
+3. Import controller functions and require path
+4. Create routes and declare appropriate functions
+5. Export router
+
+Example:
+``` javascript
+var express = require('express');
+var router = express.Router();
+
+const { getAllUser } = require("./controller/userController")
+/* GET users listing. */
+
+router.get("/", getAllUser)
+
+module.exports = router;
+```
+
