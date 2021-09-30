@@ -10,14 +10,6 @@ function checkIsEmpty(target) {
 	}
 }
 
-function checkSymbol(target) {
-	if (target.match(/[!`\-=@#$%^&*()\[\],.?":;{}|<>]/g)) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
 function checkIsEmail(target) {
 	if (target.match(/\S+@\S+\.\S+/)) {
 		return true;
@@ -58,12 +50,12 @@ async function createUser(req, res) {
 			"last name cannot contain special characters and numbers";
 	}
 
-	if (checkSymbol(username)) {
+	if (!validator.isAlphanumeric(username)) {
 		errObj.username =
 			"username cannot contain special characters and numbers";
 	}
 
-	if (!checkIsEmail(email)) {
+	if (!validator.isEmail(email)) {
 		errObj.username = "email is not a valid email";
 	}
 
