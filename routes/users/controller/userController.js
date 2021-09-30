@@ -9,13 +9,7 @@ function checkIsEmpty(target) {
 		return false;
 	}
 }
-function checkForNumbersAndSymbol(target) {
-	if (target.match(/[!`\-=@#$%^&*()\[\],.?":;{}|<>1234567890]/g)) {
-		return true;
-	} else {
-		return false;
-	}
-}
+
 function checkSymbol(target) {
 	if (target.match(/[!`\-=@#$%^&*()\[\],.?":;{}|<>]/g)) {
 		return true;
@@ -32,12 +26,6 @@ function checkIsEmail(target) {
 	}
 }
 
-// function checkPasswordStrength(target) {
-// 	var strongRegex = new RegExp(
-// 		"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[_!@#$%^=-{}[]&*|:;'?.<>`~])(?=.{8,})"
-// 	);
-// 	return !strongRegex.test(target);
-// }
 
 async function getAllUser(req, res) {
 	try {
@@ -60,12 +48,12 @@ async function createUser(req, res) {
 			errObj[`${key}`] = `${key} cannot be empty`;
 		}
 	}
-	if (checkForNumbersAndSymbol(firstName)) {
+	if (!validator.isAlpha(firstName)) {
 		errObj.firstName =
 			"first name cannot contain special characters and numbers";
 	}
 
-	if (checkForNumbersAndSymbol(lastName)) {
+	if (!validator.isAlpha(lastName)) {
 		errObj.lastName =
 			"last name cannot contain special characters and numbers";
 	}
