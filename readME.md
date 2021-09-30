@@ -1,10 +1,3 @@
-npm i bcryptjs
-
-require on controller
-
-validator lib
-https://www.npmjs.com/package/validator
-
 # Validation Intro
 
 Install Mongo following steps at [MongoDB](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/). Use Brew to install and start Mongo DB.
