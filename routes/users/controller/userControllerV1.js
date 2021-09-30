@@ -1,5 +1,4 @@
 const bcrypt = require("bcryptjs")
-const validator = require('validator');
 const User = require("../model/User");
 
 function checkIsEmpty(target) {
@@ -32,12 +31,12 @@ function checkIsEmail(target) {
 	}
 }
 
-// function checkPasswordStrength(target) {
-// 	var strongRegex = new RegExp(
-// 		"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[_!@#$%^=-{}[]&*|:;'?.<>`~])(?=.{8,})"
-// 	);
-// 	return !strongRegex.test(target);
-// }
+function checkPasswordStrength(target) {
+	var strongRegex = new RegExp(
+		"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[_!@#$%^=-{}[]&*|:;'?.<>`~])(?=.{8,})"
+	);
+	return !strongRegex.test(target);
+}
 
 async function getAllUser(req, res) {
 	try {
@@ -79,7 +78,7 @@ async function createUser(req, res) {
 		errObj.username = "email is not a valid email";
 	}
 
-    if (!validator.isStrongPassword(password)) {
+    if (checkPasswordStrength(password)) {
 		errObj.password = "Make a real passsword loser";
 	}
 	if (Object.keys(errObj).length > 0) {
