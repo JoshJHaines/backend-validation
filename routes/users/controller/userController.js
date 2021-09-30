@@ -69,7 +69,6 @@ async function createUser(req, res) {
 		res.status(500).json({ message: "error", error: error.message });
 	}
 }
-
 async function deleteUserById(req, res) {
 	try {
 		let deletedUser = await User.findByIdAndDelete(req.params.id);
@@ -82,9 +81,46 @@ async function deleteUserById(req, res) {
 		});
 	}
 }
+async function login(req, res) {
+	const { username, password } = req.body;
+	try {
+		console.log('running try')
+		let foundUser = await User.findOne({username: username})
+		console.log(`Username: `, username)
+		console.log(`Password: `, password)
+		
+		if (foundUser){
+			console.log("that bitty exists")
+			console.log("password input: ", password)
+			console.log("found user password :", foundUser.password)
+			if(password === foundUser.password){
+				res.json({ message: "success, You have logged in" });
+			} else {
+				res.status(500).json({
+					message: "Password does not match users password",
+					error: error.message,
+				})
+			}
+		} else {
+			res.status(500).json({
+				message: "Dude don't exist",
+				error: error.message,
+			})
+			console.log("aint no dude by that name")
+		}
+		console.log(`TRY BLOCK RUN COMPLETE`)
+	} catch (error) {
+		console.log('running catch')
+		res.status(500).json({
+			message: "Username or Password does not match",
+			error: error.message,
+		});
+	}
+}
 
 module.exports = {
 	getAllUser,
 	createUser,
 	deleteUserById,
+	login
 };
