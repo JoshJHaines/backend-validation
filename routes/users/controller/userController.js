@@ -9,16 +9,6 @@ function checkIsEmpty(target) {
 		return false;
 	}
 }
-
-function checkIsEmail(target) {
-	if (target.match(/\S+@\S+\.\S+/)) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-
 async function getAllUser(req, res) {
 	try {
 		let fetchedUser = await User.find({});
@@ -36,7 +26,7 @@ async function createUser(req, res) {
 	let body = req.body;
 	let errObj = {};
 	for (let key in body) {
-		if (checkIsEmpty(body[key])) {
+		if (!validator.isLength(body[key], 1)) {
 			errObj[`${key}`] = `${key} cannot be empty`;
 		}
 	}
@@ -52,7 +42,7 @@ async function createUser(req, res) {
 
 	if (!validator.isAlphanumeric(username)) {
 		errObj.username =
-			"username cannot contain special characters and numbers";
+			"username cannot contain special characters";
 	}
 
 	if (!validator.isEmail(email)) {
