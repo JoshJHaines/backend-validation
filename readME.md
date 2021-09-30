@@ -170,6 +170,7 @@ This is where you will create routes for URL use.
 3. Import controller functions and require path
 4. Create routes and declare appropriate functions
 5. Export router
+6. Don't forget to make sure that the base route is available in app.js ```app.use('/api/users', usersRouter);```
 
 Example:
 ``` javascript
