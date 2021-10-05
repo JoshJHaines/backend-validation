@@ -1,15 +1,36 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
+const {
+	checkIsEmpty,
+	checkIsUndefined,
+	validateCreateData,
+	validateLoginData,
+} = require("./lib/authMiddleware");
 
-const { createUser, getAllUser, deleteUserById, login } = require("./controller/userController")
+const {
+	createUser,
+	getAllUser,
+	deleteUserById,
+	login,
+} = require("./controller/userController");
 /* GET users listing. */
 
-router.get("/", getAllUser)
+router.get("/", getAllUser);
 
-router.get("/login", login)
+router.post(
+	"/create-user",
+	checkIsUndefined,
+	checkIsEmpty,
+	validateCreateData,
+	createUser
+);
+router.post(
+	"/login",
+	checkIsUndefined,
+	checkIsEmpty,
+	validateLoginData,
+	login);
 
-router.post('/create-user', createUser );
-
-router.delete("/delete-user-by-id/:id", deleteUserById)
+router.delete("/delete-user-by-id/:id", deleteUserById);
 
 module.exports = router;

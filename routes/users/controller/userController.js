@@ -1,7 +1,133 @@
 const bcrypt = require("bcryptjs");
-const validator = require("validator");
+
+const {
+	isEmpty,
+	isAlpha,
+	isAlphanumeric,
+	isEmail,
+	isStrongPassword,
+} = require("validator");
+
 const User = require("../model/User");
 
+
+async function createUser(req, res) {
+	const { firstName, lastName, username, email, password } = req.body;
+	let body = req.body;
+	let errObj = {};
+
+	for (let key in body) {
+		if (isEmpty(body[key])) {
+			errObj[`${key}`] = `${key} cannot be empty`;
+		}
+	}
+
+	if (!isAlpha(firstName)) {
+		errObj.firstName =
+			"First Name cannot have special characters or numbers";
+	}
+
+	if (!isAlpha(lastName)) {
+		errObj.lastName = "Last Name cannot have special characters or numbers";
+	}
+
+	if (!isAlphanumeric(username)) {
+		errObj.username = "Username cannot have special characters";
+	}
+
+	if (!isEmail(email)) {
+		errObj.email = "please enter a valid email";
+	}
+
+	if (!isStrongPassword(password)) {
+		errObj.password =
+			"Your password must contain 1 lowercase, 1 uppercase, 1 number, 1 special character and at least 8 characters long";
+	}
+
+	if (Object.keys(errObj).length > 0) {
+		//How would you validate firstName to make sure only alphabet is allowed
+		return res.status(500).json({
+			message: "error",
+			error: errObj,
+		});
+	}
+
+	try {
+		let salt = await bcrypt.genSalt(10);
+		let hashedPassword = await bcrypt.hash(password, salt);
+
+		const createdUser = new User({
+			firstName,
+			lastName,
+			username,
+			email,
+			password: hashedPassword,
+		});
+
+		let savedUser = await createdUser.save();
+
+		res.json({ message: "success", payload: savedUser });
+	} catch (error) {
+		res.status(500).json({ message: "error", error: error.message });
+	}
+}
+
+async function login(req, res) {
+	const { email, password } = req.body;
+
+	let errObj = {};
+
+	if (isEmpty(password)) {
+		errObj.password = "password cannot be empty";
+	}
+
+	if (isEmpty(email)) {
+		errObj.email = "email cannot be empty";
+	}
+
+	if (!isEmail(email)) {
+		errObj.email = "please enter a valid email";
+	}
+
+	if (Object.keys(errObj).length > 0) {
+		return res.status(500).json({
+			message: "error",
+			error: errObj,
+		});
+	}
+
+	try {
+		let foundUser = await User.findOne({ email: email });
+		if (!foundUser) {
+			return res.status(500).json({
+				message: "error",
+				error: "please go sign up",
+			});
+		} else {
+			let comparedPassword = await bcrypt.compare(
+				password,
+				foundUser.password
+			);
+
+			if (!comparedPassword) {
+				return res.status(500).json({
+					message: "error",
+					error: "Please check your email and password",
+				});
+			} else {
+				return res.json({
+					message: "success",
+				});
+			}
+		}
+	} catch (e) {
+		res.status(500).json({ message: "error", error: e.message });
+	}
+}
+
+
+
+//not in class
 async function getAllUser(req, res) {
 	try {
 		let fetchedUser = await User.find({});
@@ -12,61 +138,6 @@ async function getAllUser(req, res) {
 			message: "you have failed",
 			error: error.message,
 		});
-	}
-}
-async function createUser(req, res) {
-	const { firstName, lastName, username, email, password } = req.body;
-	let body = req.body;
-	let errObj = {};
-	for (let key in body) {
-		if (!validator.isLength(body[key], 1)) {
-			errObj[`${key}`] = `${key} cannot be empty`;
-		}
-	}
-	if (!validator.isAlpha(firstName)) {
-		errObj.firstName =
-			"first name cannot contain special characters and numbers";
-	}
-
-	if (!validator.isAlpha(lastName)) {
-		errObj.lastName =
-			"last name cannot contain special characters and numbers";
-	}
-
-	if (!validator.isAlphanumeric(username)) {
-		errObj.username = "username cannot contain special characters";
-	}
-
-	if (!validator.isEmail(email)) {
-		errObj.username = "email is not a valid email";
-	}
-
-	if (!validator.isStrongPassword(password)) {
-		errObj.password = "Make a real passsword loser";
-	}
-	if (Object.keys(errObj).length > 0) {
-		return res.status(500).json({
-			message: "error",
-			error: errObj,
-		});
-	}
-
-	try {
-		let salt = await bcrypt.genSalt(10);
-		let hashed = await bcrypt.hash(password, salt);
-
-		const createdUser = new User({
-			firstName,
-			lastName,
-			username,
-			email,
-			password: hashed,
-		});
-
-		let savedUser = await createdUser.save();
-		res.json({ message: "success", payload: savedUser });
-	} catch (error) {
-		res.status(500).json({ message: "error", error: error.message });
 	}
 }
 async function deleteUserById(req, res) {
@@ -81,46 +152,10 @@ async function deleteUserById(req, res) {
 		});
 	}
 }
-async function login(req, res) {
-	const { username, password } = req.body;
-	try {
-		console.log('running try')
-		let foundUser = await User.findOne({username: username})
-		console.log(`Username: `, username)
-		console.log(`Password: `, password)
-		
-		if (foundUser){
-			console.log("that bitty exists")
-			console.log("password input: ", password)
-			console.log("found user password :", foundUser.password)
-			if(password === foundUser.password){
-				res.json({ message: "success, You have logged in" });
-			} else {
-				res.status(500).json({
-					message: "Password does not match users password",
-					error: error.message,
-				})
-			}
-		} else {
-			res.status(500).json({
-				message: "Dude don't exist",
-				error: error.message,
-			})
-			console.log("aint no dude by that name")
-		}
-		console.log(`TRY BLOCK RUN COMPLETE`)
-	} catch (error) {
-		console.log('running catch')
-		res.status(500).json({
-			message: "Username or Password does not match",
-			error: error.message,
-		});
-	}
-}
 
 module.exports = {
 	getAllUser,
 	createUser,
 	deleteUserById,
-	login
+	login,
 };
