@@ -7,7 +7,7 @@ router.get("/", function (req, res, next) {
 })
 
 router.post("/create-order", jwtMiddleware, async function (req, res) {
-    
+    res.json({message: "boop"})
 })
 
 module.exports = router;

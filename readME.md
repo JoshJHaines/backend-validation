@@ -14,6 +14,7 @@ Install Mongo following steps at [MongoDB](https://docs.mongodb.com/manual/tutor
 * [Mongoose](https://mongoosejs.com/)
 * [BcryptJS](https://www.npmjs.com/package/bcryptjs)
 * [ValidatorJS](https://www.npmjs.com/package/validator)
+* [DotENV](https://www.npmjs.com/package/dotenv)
 
 
 ## Overview
@@ -64,6 +65,15 @@ Remove items that we will not use. At this point of class, this will be your VIE
    
 ## Add Mongo DB
 Now we are going to connect our application to a database. 
+### DOTENV
+We will need to 'save' the environment path in a .env file so that the location of your DB is not public or saved to GitHub.
+1. Create a .env file.
+2. Add your .env file to your .gitignore file
+3. Run ```npm i dotenv```
+4. In your .env file, add your db location
+```
+MONGO_DB="mongodb://localhost:27017/'database-name'"
+```
 ### App.js
 1. Under logger = morgan... add
 ``` javascript
@@ -71,7 +81,7 @@ var mongoose = require('mongoose');
 ```
 2. Then under users Router add
 ``` javascript
-mongoose.connect("mongodb://localhost:27017/'database-name'",{
+mongoose.connect(process.env.MONGO_DB,{
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
