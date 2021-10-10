@@ -194,4 +194,7 @@ router.get("/", getAllUser)
 
 module.exports = router;
 ```
-
+## Refactor Code
+At this point, we may have some code that is being used multiple times. We will want to create a library (lib) folder inside of the users folder. This should be on the same level of the controller and model folders. In here you can create middleware folders and/or files to pull code out into that can be reused. 
+### Library
+This will most likely be expanded on as I do homework.
