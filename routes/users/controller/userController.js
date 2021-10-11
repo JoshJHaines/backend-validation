@@ -116,9 +116,15 @@ async function login(req, res) {
 					error: "Please check your email and password",
 				});
 			} else {
-				return res.json({
-					message: "success",
-				});
+				
+				let jwtToken = jwt.sign(
+					{
+						email: foundUser.email,
+						username: foundUser.username
+					},
+					process.env.JWT_SECRET,
+					{ expiresIn: "24h"}
+				)
 			}
 		}
 	} catch (e) {
