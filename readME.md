@@ -34,10 +34,10 @@ First you will need to initialize/create the application. Create the directory w
 6. Run ```npm i bcryptjs```
 7. Run ```npm i validator```
 8. Run ```touch .env```
-   1. This will house environment items that need to be secure such as your DB location and JWT info
+   - This will house environment items that need to be secure such as your DB location and JWT info
 9.  Run ``` touch .gitignore``` 
-   1. Add ```/node_modules``` to the file.
-   2. Add ```.env``` to the file.
+   - Add ```/node_modules``` to the file.
+   - Add ```.env``` to the file.
 10. Connect to or init git repo
 11. Run ```touch README.md``` as needed/desired
 
