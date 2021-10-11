@@ -125,6 +125,8 @@ async function login(req, res) {
 					process.env.JWT_SECRET,
 					{ expiresIn: "24h"}
 				)
+
+				res.json({ message: "success", payload: jwtToken})
 			}
 		}
 	} catch (e) {
