@@ -78,7 +78,11 @@ We will need to 'save' the environment path in a .env file so that the location 
 MONGO_DB="mongodb://localhost:27017/'database-name'"
 ```
 ### App.js
-1. Under logger = morgan... add
+1. Line 1 of app.js ... add the below code. Without this, you will not connect to DB.
+   ``` javascript
+   require("dotenv").config();
+   ```
+2. Under logger = morgan... require mongoose
 ``` javascript
 var mongoose = require('mongoose');
 ```
@@ -95,6 +99,9 @@ mongoose.connect(process.env.MONGO_DB,{
   console.log(e)
 })
 ```
+
+### Check Status
+Start your server. Make sure your server runs, connects to the DB and can be seen on localhost:3000
 ## Routes Structure
 
 - routes
