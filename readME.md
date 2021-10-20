@@ -207,4 +207,7 @@ module.exports = router;
 ## Refactor Code
 At this point, we may have some code that is being used multiple times. We will want to create a library (lib) folder inside of the users folder. This should be on the same level of the controller and model folders. In here you can create middleware folders and/or files to pull code out into that can be reused. 
 ### Library
-This will most likely be expanded on as I do homework.
+Inside the users folder, create a folder called 'lib' short for library. In here you will pull out your functions from the controller to be used over and over instead of writing everything twice.
+
+### index.js
+Inside the index.js, you will pull in all middleware items from various files and directories. From there you will import those functions from index.js to the Router.
