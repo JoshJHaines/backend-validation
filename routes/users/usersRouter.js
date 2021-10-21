@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+const jwt = require("jsonwebtoken");
 const {
 	checkIsEmpty,
 	checkIsUndefined,
@@ -24,12 +25,17 @@ router.post(
 	validateCreateData,
 	createUser
 );
-router.post(
-	"/login",
-	checkIsUndefined,
-	checkIsEmpty,
-	validateLoginData,
-	login);
+router.post("/login", checkIsUndefined, checkIsEmpty, validateLoginData, login);
+
+router.post("/profile", function (req, res) {
+	try {
+		let decodedToken = jwt.verify(req.body.token, process.env.JWT_SECRET);
+
+		res.json({ token: decodedToken });
+	} catch (e) {
+		res.status(500).json({ message: "error", error: e.message });
+	}
+});
 
 router.delete("/delete-user-by-id/:id", deleteUserById);
 

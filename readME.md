@@ -211,3 +211,14 @@ Inside the users folder, create a folder called 'lib' short for library. In here
 
 ### index.js
 Inside the index.js, you will pull in all middleware items from various files and directories. From there you will import those functions from index.js to the Router.
+
+
+# Needed notes
+- [ ] Organizing middleware
+- [ ] Shared middleware
+- [ ] importing JWT
+  - [ ] creating tokens
+  - [ ] validating tokens
+- [ ] linking models
+- [ ] res.locals
+- [ ] saving to two models at once
