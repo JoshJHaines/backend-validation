@@ -213,6 +213,11 @@ Inside the users folder, create a folder called 'lib' short for library. In here
 Inside the index.js, you will pull in all middleware items from various files and directories. From there you will import those functions from index.js to the Router.
 
 
+## Testing
+Early on, testing should be added and run regularly. As your app evolves, you will be upgrading and refactoring code. When changes are made you will want to make sure your functionality does not regress. To do so, write tests early and often. 
+https://jestjs.io/docs/getting-started
+https://www.simplifiedcode.co.in/blog/how-to-write-unit-test-case-using-jest-and-nodejs/
+https://medium.com/geekculture/a-beginners-guide-to-unit-testing-with-jest-549a47edd3ea
 # Needed notes
 - [ ] Organizing middleware
 - [ ] Shared middleware
